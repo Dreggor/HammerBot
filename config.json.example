@@ -1,0 +1,12 @@
+{
+    "HammerBot": {
+        "botname": "",
+        "discord": {
+            "user": "",
+            "password": ""
+        },
+        "admin_channel": "",
+        "admin_channel_ID": "",
+        "admins": []
+    }
+}
