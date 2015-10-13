@@ -2,8 +2,9 @@
     "DiscBot": {
         "botname": "",
         "discord": {
-            "user": "",
-            "password": ""
+            "email": "",
+            "password": "",
+            "username": ""
         },
         "admin_channel": "",
         "admin_channel_ID": "",
