@@ -1,15 +1,8 @@
 #UserComamnds.py
-import discord
 
-def hello(message):
-	print "inside hello"
-	print message.channel
-	print message.author.name
-	try:
+def hello(client, message):
 		client.send_message(message.channel, 'Hello %s , I am HammerBot' % message.author.name)
-	except:
-		print "could not send"
 	
 def bye():
-	print "in the bye module"
+	print "I am not going away, so why don't you leave!"
 	return()
