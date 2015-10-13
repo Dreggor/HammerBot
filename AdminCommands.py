@@ -12,4 +12,4 @@ def exitbot(client, message):
 	consolelog(message.author.name, str(message.content))
 	sys.exit(0)
 
-	
+adminStrings = {'!exit': exitbot}

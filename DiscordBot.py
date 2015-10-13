@@ -30,19 +30,17 @@ except sql.Error, e:
 
 @client.event
 def on_message(message):
-	userCommands = {'!hello': UserCommands.hello, '!bye': UserCommands.bye}
-	adminStrings = {'!exit': AdminCommands.exitbot}
 	if message.author.name == json_data['DiscBot']['discord']['username']:
 		return()
 	if message.content.startswith("!"):
-		for key in userCommands:  #seems like there is a lot of looping here
+		for key in UserCommands.userCommands:  #seems like there is a lot of looping here
 			if message.content.startswith(key):
-				userCommands[key](client, message)
-		for key in adminStrings:  #seems like there is a lot of looping here
+				UserCommands.userCommands[key](client, message)
+		for key in AdminCommands.adminStrings:  #seems like there is a lot of looping here
 			for admin in gAdmins:
 				if message.author.name == admin:
 					if message.content.startswith(key):
-						adminStrings[key](client, message)
+						AdminCommands.adminStrings[key](client, message)
 	for row in rows:
 			word = row[0]
 			#print("Inside for statement for word scanning: " + word)
