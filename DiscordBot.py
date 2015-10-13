@@ -34,15 +34,22 @@ def on_message(message):
 	adminStrings = {'!exit': AdminCommands.exitbot}
 	if message.author.name == json_data['DiscBot']['discord']['username']:
 		return()
-	for key in userCommands:  #seems like there is a lot of looping here
-		if message.content.startswith(key):
-			print "inside if"
-			userCommands[key](client, message)
-	for key in adminStrings:  #seems like there is a lot of looping here
-		for admin in gAdmins:
-			if message.author.name == admin:
-				if message.content.startswith(key):
-					adminStrings[key](client, message)
+	if message.content.startswith("!"):
+		for key in userCommands:  #seems like there is a lot of looping here
+			if message.content.startswith(key):
+				userCommands[key](client, message)
+		for key in adminStrings:  #seems like there is a lot of looping here
+			for admin in gAdmins:
+				if message.author.name == admin:
+					if message.content.startswith(key):
+						adminStrings[key](client, message)
+	for row in rows:
+			word = row[0]
+			#print("Inside for statement for word scanning: " + word)
+			if word in message.content:
+				link = row[1]
+				client.send_message(message.channel, link)
+					
 @client.event
 def on_ready():
 	print("Logged in as: " + client.user.name)
