@@ -12,4 +12,19 @@ def exitbot(client, message):
 	consolelog(message.author.name, str(message.content))
 	sys.exit(0)
 
-adminStrings = {'!exit': exitbot}
+def addword(client, message):
+	import sqlite3 as sql
+	con = sql.connect('discwords')
+	cur = con.cursor()
+	keyword = str(message.content).split(" ")
+	try:
+		cur.execute('''INSERT INTO links (word,url) VALUES (?,?)''', (keyword[1], keyword[2]))
+		cur.commit()
+		client.send_message(message.channel, "Adding Keyword: " + keyword[1] + " with URL: " + keyword[2])
+	except:
+		client.send_message(message.channel, 'Unable to add keyword: %s' % keyword[1])
+	
+	
+	
+	
+adminStrings = {'!exit': exitbot, '!addkeyword': addword}
