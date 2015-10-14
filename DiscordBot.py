@@ -22,14 +22,16 @@ con = None
 try: 
 	con = sql.connect('discwords')
 	cur = con.cursor()
-	cur.execute("SELECT * FROM links")
-	rows = cur.fetchall()
+	
+	
 except sql.Error, e:
 	print "Error %s:" % e.args[0]
 	sys.exit(1)
 
 @client.event
 def on_message(message):
+	cur.execute("SELECT * FROM links")
+	rows = cur.fetchall()
 	if message.author.name == json_data['DiscBot']['discord']['username']:
 		return()
 	if message.content.startswith("!"):
