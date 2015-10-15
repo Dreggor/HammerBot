@@ -58,6 +58,12 @@ def word(client, message):
 			else:
 				client.send_message(message.channel, "Keyword %s not found." % commandline[2])
 		return()
+	if commandline[1] == "help":
+		client.send_message(message.channel, "Word command usage:")
+		client.send_message(message.channel, "Command: !word list  -Lists all active keywords-")
+		client.send_message(message.channel, "Command: !word add <keyword> <url>  -Adds a keyword-")
+		client.send_message(message.channel, "Command: !word remove <keyword>  -Removes a keyword-")
+		return()
 	else:
 		client.send_message(message.channel, "SubCommand %s not found in command !word" % commandline[1]) 
 	
