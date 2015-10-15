@@ -23,7 +23,6 @@ try:
 	con = sql.connect('discwords')
 	cur = con.cursor()
 	
-	
 except sql.Error, e:
 	print "Error %s:" % e.args[0]
 	sys.exit(1)
@@ -42,14 +41,15 @@ def on_message(message):
 			for admin in gAdmins:
 				if message.author.name == admin:
 					if message.content.startswith(key):
-						AdminCommands.adminStrings[key](client, message)
+						AdminCommands.adminStrings[key](client, message, con)
+
 	for row in rows:
 			word = row[0]
 			#print("Inside for statement for word scanning: " + word)
 			if word in message.content:
 				link = row[1]
 				client.send_message(message.channel, link)
-					
+	conn.close()
 @client.event
 def on_ready():
 	print("Logged in as: " + client.user.name)

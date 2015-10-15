@@ -5,17 +5,15 @@ import datetime, time
 ts = time.time()
 st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
 
-def consolelog(name, content):
+def consolelog(name, content, con):
 	print("User: " + name + " ran command: " + content + " at: " + st)
 
-def exitbot(client, message):
+def exitbot(client, message, con):
 	client.send_message(message.channel, 'Discord Bot Stopping')
 	consolelog(message.author.name, str(message.content))
 	sys.exit(0)
 
-def word(client, message):
-	import sqlite3 as sql
-	con = sql.connect('discwords')
+def word(client, message, con):
 	cur = con.cursor()
 	commandline = str(message.content).split(" ")
 	print commandline[1]
