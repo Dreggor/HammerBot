@@ -32,7 +32,6 @@ def on_message(message):
 	cur.execute("SELECT * FROM links")
 	rows = cur.fetchall()
 	firstword = message.content.split()[0]
-	print firstword
 	if message.author.name == json_data['DiscBot']['discord']['username']:
 		return()
 	if message.content.startswith("!"):
