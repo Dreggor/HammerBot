@@ -5,16 +5,16 @@ import datetime, time
 ts = time.time()
 st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
 
-def consolelog(name, content, con):
+def consolelog(name, content, db):
 	print("User: " + name + " ran command: " + content + " at: " + st)
 
-def exitbot(client, message, con):
+def exitbot(client, message, db):
 	client.send_message(message.channel, 'Discord Bot Stopping')
 	consolelog(message.author.name, str(message.content))
 	sys.exit(0)
 
-def word(client, message, con):
-	cur = con.cursor()
+def word(client, message, db):
+	cur = db.cursor()
 	commandline = str(message.content).split(" ")
 	print commandline[1]
 	if commandline[1] == "list":
@@ -23,7 +23,7 @@ def word(client, message, con):
 		keywords = []
 		for i in rows:
 			keywords.append(str(i[0]))
-		con.close()
+		db.close()
 		keywords = str(', '.join(keywords))
 		client.send_message(message.channel, keywords )
 		return()
@@ -32,7 +32,7 @@ def word(client, message, con):
 		try:
 			cur.execute('''INSERT INTO links (word,url) VALUES (?,?)''', (commandline[2], commandline[3]))
 			con.commit()
-			con.close()
+			db.close()
 			client.send_message(message.channel, "Adding Keyword: " + commandline[2])
 			print("User: " + message.author.name + "Added keyword: " + commandline[2] + " That has URL: " + commandline[3] + " At: " + str(st))
 		except:
@@ -50,7 +50,7 @@ def word(client, message, con):
 					print("User: " + message.author.name + "Deleted keyword: " + commandline[2] + " At: " + str(st))
 					cur.execute("DELETE FROM links WHERE word = ?", (commandline[2],))
 					con.commit()
-					con.close()
+					db.close()
 				except:
 					client.send_message(message.channel, 'Unable to delete keyword: %s' % commandline[2])
 			else:

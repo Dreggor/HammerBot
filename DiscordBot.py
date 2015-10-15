@@ -35,12 +35,14 @@ def on_message(message):
 	if message.author.name == json_data['DiscBot']['discord']['username']:
 		return()
 	if message.content.startswith("!"):
-		for key in UserCommands.userCommands:  #seems like there is a lot of looping here
-			if message.content.startswith(key):
-				UserCommands.userCommands[key](client, message)	
+		if firstword in UserCommands.userCommands:  #seems like there is a lot of looping here
+			if message.content.startswith(firstword):
+				UserCommands.userCommands[firstword](client, message)	
+				return()
 		if firstword in AdminCommands.adminStrings:
 			if message.author.name in gAdmins and message.content.startswith(firstword):
 				AdminCommands.adminStrings[firstword](client, message, db)
+				return()
 			else:
 				client.send_message(message.channel, "Sorry %s you are not allowed to run that command." % message.author.name)
 				return()
@@ -51,7 +53,7 @@ def on_message(message):
 	else:
 		for row in rows:
 				word = row[0]
-				#print("Inside for statement for word scanning: " + word)
+				print("Inside for statement for word scanning: " + word)
 				if word in message.content:
 					link = row[1]
 					client.send_message(message.channel, link)
