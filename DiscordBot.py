@@ -31,25 +31,31 @@ except sql.Error, e:
 def on_message(message):
 	cur.execute("SELECT * FROM links")
 	rows = cur.fetchall()
+	firstword = message.content.split()
+	print firstword[0]
 	if message.author.name == json_data['DiscBot']['discord']['username']:
 		return()
 	if message.content.startswith("!"):
 		for key in UserCommands.userCommands:  #seems like there is a lot of looping here
 			if message.content.startswith(key):
-				UserCommands.userCommands[key](client, message)
-		for key in AdminCommands.adminStrings:  #seems like there is a lot of looping here
-			for admin in gAdmins:
-				if message.author.name == admin:
-					if message.content.startswith(key):
-						AdminCommands.adminStrings[key](client, message, con)
-
-	for row in rows:
-			word = row[0]
-			#print("Inside for statement for word scanning: " + word)
-			if word in message.content:
-				link = row[1]
-				client.send_message(message.channel, link)
-	conn.close()
+				UserCommands.userCommands[key](client, message)	
+		if firstword[0] in AdminCommands.adminStrings:
+#		for key in AdminCommands.adminStrings:  #seems like there is a lot of looping here
+			if message.author.name in gAdmins and message.content.startswith(key):
+#					if message.content.startswith(key):
+				AdminCommands.adminStrings[key](client, message, con)
+#			else:
+#				client.send_message(message.channel, "Sorry %s you are not allowed to run that command." % message.author.name)
+#				return()
+	else:
+		for row in rows:
+				word = row[0]
+				#print("Inside for statement for word scanning: " + word)
+				if word in message.content:
+					link = row[1]
+					client.send_message(message.channel, link)
+		conn.close()
+		return()
 @client.event
 def on_ready():
 	print("Logged in as: " + client.user.name)
