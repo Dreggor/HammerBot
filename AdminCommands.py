@@ -9,6 +9,7 @@ def consolelog(name, content, db):
 	print("User: " + name + " ran command: " + content + " at: " + st)
 
 def exitbot(client, message, db):
+	cur = db.cursor()
 	client.send_message(message.channel, 'Discord Bot Stopping')
 	consolelog(message.author.name, str(message.content))
 	sys.exit(0)
@@ -23,7 +24,6 @@ def word(client, message, db):
 		keywords = []
 		for i in rows:
 			keywords.append(str(i[0]))
-		db.close()
 		keywords = str(', '.join(keywords))
 		client.send_message(message.channel, keywords )
 		return()
@@ -31,8 +31,7 @@ def word(client, message, db):
 		print("Attempting to add: " + commandline[2] + " To URL: " + commandline[3])
 		try:
 			cur.execute('''INSERT INTO links (word,url) VALUES (?,?)''', (commandline[2], commandline[3]))
-			con.commit()
-			db.close()
+			db.commit()
 			client.send_message(message.channel, "Adding Keyword: " + commandline[2])
 			print("User: " + message.author.name + "Added keyword: " + commandline[2] + " That has URL: " + commandline[3] + " At: " + str(st))
 		except:
@@ -49,8 +48,7 @@ def word(client, message, db):
 					client.send_message(message.channel, "Deleting Keyword: " + commandline[2])
 					print("User: " + message.author.name + "Deleted keyword: " + commandline[2] + " At: " + str(st))
 					cur.execute("DELETE FROM links WHERE word = ?", (commandline[2],))
-					con.commit()
-					db.close()
+					db.commit()
 				except:
 					client.send_message(message.channel, 'Unable to delete keyword: %s' % commandline[2])
 			else:
