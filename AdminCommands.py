@@ -28,36 +28,41 @@ def word(client, message, db):
 		client.send_message(message.channel, keywords )
 		return()
 	if commandline[1] == "add":
-		print("Attempting to add: " + commandline[2] + " To URL: " + commandline[3])
+		commandsplit = str(message.content.split("add ",1)[1])
+		command = commandsplit.split(",")
+		print command
+		print("Attempting to add: " + command[0] + " To URL: " + command[1])
 		try:
-			cur.execute('''INSERT INTO links (word,url) VALUES (?,?)''', (commandline[2], commandline[3]))
+			cur.execute('''INSERT INTO links (word,url) VALUES (?,?)''', (command[0], command[1]))
 			db.commit()
-			client.send_message(message.channel, "Adding Keyword: " + commandline[2])
-			print("User: " + message.author.name + "Added keyword: " + commandline[2] + " That has URL: " + commandline[3] + " At: " + str(st))
+			client.send_message(message.channel, "Adding Keyphrase: " + command[0])
+			print("User: " + message.author.name + "Added keyword: " + command[0] + " That has URL: " + command[1] + " At: " + str(st))
 		except:
-			client.send_message(message.channel, 'Unable to add keyword: %s' % commandline[2])
+			client.send_message(message.channel, 'Unable to add keyword: %s' % command[0])
 		return()
 	if commandline[1] == "remove":
-		cur.execute("SELECT * FROM links")
-		rows = cur.fetchall()
-		keywords = []
-		for i in rows:
-			keywords.append(str(i[0]))
-			if commandline[2] in keywords:
-				try:
-					client.send_message(message.channel, "Deleting Keyword: " + commandline[2])
-					print("User: " + message.author.name + "Deleted keyword: " + commandline[2] + " At: " + str(st))
-					cur.execute("DELETE FROM links WHERE word = ?", (commandline[2],))
-					db.commit()
-				except:
-					client.send_message(message.channel, 'Unable to delete keyword: %s' % commandline[2])
-			else:
-				client.send_message(message.channel, "Keyword %s not found." % commandline[2])
+#		cur.execute("SELECT * FROM links")
+#		rows = cur.fetchall()
+		command = str(message.content.split("remove ",1)[1])
+#		keywords = []
+#		for i in rows:
+#		keywords.append(str(i[0]))
+#		if command in keywords:
+#		try:
+		print command
+		client.send_message(message.channel, "Deleting Keyword: " + command)
+		print("User: " + message.author.name + "Deleted keyword: " + command + " At: " + str(st))
+		cur.execute("DELETE FROM links WHERE word = ?", (command,))
+		db.commit()
+#		except:
+#			client.send_message(message.channel, 'Unable to delete keyword: %s' % command)
+#		else:
+#			client.send_message(message.channel, "Keyword %s not found." % command)
 		return()
 	if commandline[1] == "help":
 		client.send_message(message.channel, "Word command usage:")
 		client.send_message(message.channel, "Command: !word list  -Lists all active keywords-")
-		client.send_message(message.channel, "Command: !word add <keyword> <url>  -Adds a keyword-")
+		client.send_message(message.channel, "Command: !word add <keyword>,<url>  -Adds a keyword-")
 		client.send_message(message.channel, "Command: !word remove <keyword>  -Removes a keyword-")
 		return()
 	else:
